@@ -17,9 +17,8 @@ header('location:../index.php');
 <link rel="stylesheet" href="../css/fullcalendar.css" />
 <link rel="stylesheet" href="../css/matrix-style.css" />
 <link rel="stylesheet" href="../css/matrix-media.css" />
-<link href="../font-awesome/css/all.css" rel="stylesheet" />
 <link href="../font-awesome/css/fontawesome.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="../font-awesome/css/all.css" rel="stylesheet" />
 <link rel="stylesheet" href="../css/jquery.gritter.css" />
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 </head>
@@ -43,15 +42,15 @@ header('location:../index.php');
 <!--close-top-serch-->
 
 <!--sidebar-menu-->
-<?php $page='c-p-r'; include 'includes/sidebar.php'?>
+<?php $page="member-repo"; include 'includes/sidebar.php'?>
 <!--sidebar-menu-->
 
 <div id="content">
   <div id="content-header">
     <div id="breadcrumb"> <a href="index.php" title="Go to Home" class="tip-bottom"><i class="fas fa-home"></i> Home</a> <a href="member-report.php" class="current">Member Reports</a> </div>
-    <h1 class="text-center">Progress Report <i class="fas fa-tasks"></i></h1>
+    <h1 class="text-center">Member's Report <i class="fas fa-file"></i></h1>
   </div>
-  <div class="container-fluid">
+  <div class="container-fluid print-container">
     <div class="row-fluid">
       <div class="span12">
 	          <div class="widget-box">
@@ -68,7 +67,7 @@ header('location:../index.php');
               <div class="span4">
                 <table class="">
                   <tbody>
-                  <tr>
+                    <tr>
                       <td><h4>Perfect GYM Club</h4></td>
                     </tr>
                     <tr>
@@ -90,27 +89,29 @@ header('location:../index.php');
                   <thead>
                     <tr>
                       <th class="head0">Membership ID</th>
-                      <th class="head1 right">Initial Weight</th>
-                      <th class="head0 right">Current Weight</th>
                       <th class="head1">Services Taken</th>
-                      <th class="head0 right">Plans (Upto)</th>
+                      <th class="head0 right">My Plans (Upto)</th>
+                      <th class="head1 right">Address</th>
+                      <th class="head0 right">Charge</th>
+                      <th class="head0 right">Attendance Count</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td><div class="text-center">PGC-SS-<?php echo $row['user_id']; ?></div></td>
-                      <td><div class="text-center"><?php echo $row['ini_weight']; ?> KG</div></td>
-                      <td><div class="text-center"><?php echo $row['curr_weight']; ?> KG</div></td>
                       <td><div class="text-center"><?php echo $row['services']; ?></div></td>
-                      <td><div class="text-center"><?php echo $row['plan']; ?> Month/s</div></td>
+                      <td><div class="text-center"><?php if($row['plan'] == 0) { echo 'NONE';} else {echo $row['plan'].' Month/s';} ?></div></td>
+                      <td><div class="text-center"><?php echo $row['address']; ?></div></td>
+                      <td><div class="text-center"><?php echo '$'.$row['amount']; ?></div></td>
+                      <td><div class="text-center"><?php echo $row['attendance_count']; ?> Day/s</div></td>
                     </tr>
                   </tbody>
                 </table>
                 <table class="table table-bordered table-invoice-full">
                   <tbody>
                     <tr>
-                      <td class="msg-invoice" width="55%"> <div class="text-center"><h5><?php echo $row['fullname']; ?>'s Body Structure stated as from <?php echo $row['ini_bodytype']; ?> to <?php echo $row['curr_bodytype']; ?>. <br /> With Total Weight Differences of <?php include 'actions/weight-diff.php';?> KG <br /> As per records of <?php echo $row['progress_date']; ?></h5>
-                        
+                      <td class="msg-invoice" width="55%"> <div class="text-center"><h4>Last Payment Done:  $<?php echo $row['amount']; ?>/-</h4>
+                        <em><a href="#" class="tip-bottom" title="Registration Date" style="font-size:15px;">Member Since: <?php echo $row['dor']; ?> </a></em> </td>
                         </div>
                     </tr>
                   </tbody>
@@ -121,9 +122,7 @@ header('location:../index.php');
 
             <div class="row-fluid">
                 <div class="pull-left">
-                <br>
-                
-                <h4>GYM Member: <?php echo $row['fullname']; ?> <br> Weight Variation of <em style="color:green"><?php include 'actions/progress-percent.php';?>%</em> as per current updates! <i class="fa fa-spinner fa-spin" style="font-size:24px"></i><br/> <br/>  <br/></h4><p>Thank you for choosing our services.<br/>- on the behalf of whole team</p>
+                <h4>Member <?php echo $row['fullname']; ?>,<br/> <br/> Membership is currently <?php echo $row['status']; ?>! <br/></h4><p>Thank you for choosing our services.<br/>- on the behalf of whole team</p>
                 </div>
                 <div class="pull-right">
                   <h4><span>Approved By:</h4>
@@ -141,6 +140,11 @@ header('location:../index.php');
     </div>
 
   </div>
+
+  <div class="text-center">
+    <button class="btn btn-danger" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+  </div>
+
 </div>
 
 <!--end-main-container-part-->
@@ -154,6 +158,23 @@ header('location:../index.php');
 <style>
 #footer {
   color: white;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-container, .print-container * {
+    visibility: visible;
+  }
+
+  .print-container {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+  }
 }
 </style>
 
